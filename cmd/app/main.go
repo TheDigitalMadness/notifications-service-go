@@ -8,8 +8,11 @@ import (
 
 	"github.com/TheDigitalMadness/notifications-service-go/internal/config"
 	httpController "github.com/TheDigitalMadness/notifications-service-go/internal/controller/http"
+	"github.com/TheDigitalMadness/notifications-service-go/internal/repository"
 	"github.com/TheDigitalMadness/notifications-service-go/internal/service"
+	"github.com/TheDigitalMadness/notifications-service-go/pkg/db"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/fx"
 )
 
@@ -19,13 +22,15 @@ func main() {
 		fx.Provide(httpController.New),
 		fx.Provide(service.New),
 		fx.Provide(httpController.NewRouter),
-		fx.Invoke(startServer),
+		fx.Provide(db.NewPostgres),
+		fx.Provide(repository.New),
+		fx.Invoke(initLifecycle),
 	)
 
 	fx.New(module).Run()
 }
 
-func startServer(cfg *config.Config, lc fx.Lifecycle, router *gin.Engine) {
+func initLifecycle(cfg *config.Config, lc fx.Lifecycle, router *gin.Engine, pool *pgxpool.Pool) {
 	addr := fmt.Sprintf(":%d", cfg.HTTP.Port)
 	server := &http.Server{
 		Addr:    addr,
@@ -52,6 +57,7 @@ func startServer(cfg *config.Config, lc fx.Lifecycle, router *gin.Engine) {
 		}
 	}
 	onStop := func(ctx context.Context) error {
+		pool.Close()
 		return server.Shutdown(ctx)
 	}
 

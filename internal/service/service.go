@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/TheDigitalMadness/notifications-service-go/internal/domain/entities/notification"
+	"github.com/TheDigitalMadness/notifications-service-go/internal/domain/entity/notification"
 )
 
 type Repositrory interface {

@@ -3,7 +3,7 @@ package httpController
 import (
 	"context"
 
-	"github.com/TheDigitalMadness/notifications-service-go/internal/domain/responses"
+	responses "github.com/TheDigitalMadness/notifications-service-go/internal/domain/response"
 )
 
 type HttpService interface {

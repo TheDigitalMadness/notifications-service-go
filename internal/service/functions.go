@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/TheDigitalMadness/notifications-service-go/internal/domain/entities/notification"
-	"github.com/TheDigitalMadness/notifications-service-go/internal/domain/responses"
+	"github.com/TheDigitalMadness/notifications-service-go/internal/domain/entity/notification"
+	responses "github.com/TheDigitalMadness/notifications-service-go/internal/domain/response"
 )
 
 func (s *service) CreateNotification(ctx context.Context, publicType notification.PublicType, type_ string, message string, userID *int) {
