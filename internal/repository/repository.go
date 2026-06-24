@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/TheDigitalMadness/notifications-service-go/internal/domain/entity/notification"
+	notification_model "github.com/TheDigitalMadness/notifications-service-go/internal/models/notification"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -18,7 +18,7 @@ func New(pool *pgxpool.Pool) *repository {
 	}
 }
 
-func (r *repository) CreateNotification(ctx context.Context, publicType notification.PublicType, type_ string, message string, userID *int) error {
+func (r *repository) CreateNotification(ctx context.Context, publicType notification_model.PublicType, type_ string, message string, userID *int) error {
 	op := "CreateNotification"
 
 	_, err := r.pool.Exec(ctx, createNotificationQuery, publicType, userID, type_, message)
@@ -29,7 +29,7 @@ func (r *repository) CreateNotification(ctx context.Context, publicType notifica
 	return nil
 }
 
-func (r *repository) GetByUserID(ctx context.Context, userID int) ([]notification.Notification, error) {
+func (r *repository) GetByUserID(ctx context.Context, userID int) ([]notification_model.Notification, error) {
 	op := "GetByUserID"
 
 	rows, err := r.pool.Query(ctx, getByUserID, userID)
@@ -37,10 +37,10 @@ func (r *repository) GetByUserID(ctx context.Context, userID int) ([]notificatio
 		return nil, fmt.Errorf("Postgres query: %s: %w", op, err)
 	}
 
-	var notifications []notification.Notification
+	var notifications []notification_model.Notification
 
 	for rows.Next() {
-		var notification notification.Notification
+		var notification notification_model.Notification
 
 		err := rows.Scan(&notification)
 		if err != nil {
@@ -53,18 +53,18 @@ func (r *repository) GetByUserID(ctx context.Context, userID int) ([]notificatio
 	return notifications, nil
 }
 
-func (r *repository) GetAdminNotifications(ctx context.Context, page int, limit int) ([]notification.Notification, error) {
+func (r *repository) GetAdminNotifications(ctx context.Context, page int, limit int) ([]notification_model.Notification, error) {
 	op := "GetAdminNotifications"
 
-	rows, err := r.pool.Query(ctx, getAdminNotifications, notification.PublicTypeAdmin, (page-1)*limit, limit)
+	rows, err := r.pool.Query(ctx, getAdminNotifications, notification_model.PublicTypeAdmin, (page-1)*limit, limit)
 	if err != nil {
 		return nil, fmt.Errorf("Postgres query: %s: %w", op, err)
 	}
 
-	var notifications []notification.Notification
+	var notifications []notification_model.Notification
 
 	for rows.Next() {
-		var notification notification.Notification
+		var notification notification_model.Notification
 
 		err := rows.Scan(&notification)
 		if err != nil {

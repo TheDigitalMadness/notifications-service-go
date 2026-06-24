@@ -10,12 +10,3 @@ func parseQueryDto[dtoType any](c *gin.Context) (dtoType, error) {
 	}
 	return dto, nil
 }
-
-type getAllNotificationsByUserDto struct {
-	userID int
-}
-
-type getAdminNotificationsDto struct {
-	page  int
-	limit int
-}

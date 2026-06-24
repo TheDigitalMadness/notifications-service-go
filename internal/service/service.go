@@ -3,13 +3,13 @@ package service
 import (
 	"context"
 
-	"github.com/TheDigitalMadness/notifications-service-go/internal/domain/entity/notification"
+	notification_model "github.com/TheDigitalMadness/notifications-service-go/internal/models/notification"
 )
 
 type Repositrory interface {
-	CreateNotification(ctx context.Context, publicType notification.PublicType, type_ string, message string, userID *int) error
-	GetByUserID(ctx context.Context, userID int) ([]notification.Notification, error)
-	GetAdminNotifications(ctx context.Context, page int, limit int) ([]notification.Notification, error)
+	CreateNotification(ctx context.Context, publicType notification_model.PublicType, type_ string, message string, userID *int) error
+	GetByUserID(ctx context.Context, userID int) ([]notification_model.Notification, error)
+	GetAdminNotifications(ctx context.Context, page int, limit int) ([]notification_model.Notification, error)
 	SetRead(ctx context.Context, ids []string) error
 }
 

@@ -17,21 +17,25 @@ import (
 )
 
 func main() {
-	module := fx.Options(
+	module := getModule()
+
+	fx.New(module).Run()
+}
+
+func getModule() fx.Option {
+	return fx.Options(
 		fx.Provide(config.MustMakeConfig),
 		fx.Provide(httpController.New),
 		fx.Provide(service.New),
 		fx.Provide(httpController.NewRouter),
 		fx.Provide(db.NewPostgres),
 		fx.Provide(repository.New),
-		fx.Invoke(initLifecycle),
+		fx.Invoke(run),
 	)
-
-	fx.New(module).Run()
 }
 
-func initLifecycle(cfg *config.Config, lc fx.Lifecycle, router *gin.Engine, pool *pgxpool.Pool) {
-	addr := fmt.Sprintf(":%d", cfg.HTTP.Port)
+func run(cfg *config.Config, lc fx.Lifecycle, router *gin.Engine, pool *pgxpool.Pool) {
+	addr := fmt.Sprintf("%s:%d", cfg.HTTP.Host, cfg.HTTP.Port)
 	server := &http.Server{
 		Addr:    addr,
 		Handler: router,
@@ -52,7 +56,7 @@ func initLifecycle(cfg *config.Config, lc fx.Lifecycle, router *gin.Engine, pool
 		select {
 		case err := <-errChan:
 			return err
-		case <-time.After(100 * time.Millisecond):
+		case <-time.After(time.Duration(cfg.HTTP.Timeout) * time.Millisecond):
 			return nil
 		}
 	}

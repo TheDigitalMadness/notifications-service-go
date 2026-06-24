@@ -2,13 +2,11 @@ package httpController
 
 import (
 	"context"
-
-	responses "github.com/TheDigitalMadness/notifications-service-go/internal/domain/response"
 )
 
 type HttpService interface {
-	GetAllNotificationsByUser(ctx context.Context, userID int) (responses.NotificationsResponse, error)
-	GetAdminNotifications(ctx context.Context, page int, limit int) (responses.NotificationsResponse, error)
+	GetAllNotificationsByUser(ctx context.Context, userID int) (NotificationsResponse, error)
+	GetAdminNotifications(ctx context.Context, page int, limit int) (NotificationsResponse, error)
 }
 
 type handler struct {

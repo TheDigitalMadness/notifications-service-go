@@ -2,7 +2,6 @@ package config
 
 import (
 	"github.com/ilyakaznacheev/cleanenv"
-	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -12,7 +11,6 @@ type Config struct {
 }
 
 func MustMakeConfig() *Config {
-	_ = godotenv.Load()
 	cfg := Config{}
 
 	if err := cleanenv.ReadEnv(&cfg); err != nil {
