@@ -7,7 +7,7 @@ import (
 )
 
 func (h *handler) GetAllNotificationsByUser(ctx *gin.Context) {
-	dto, err := parseQueryDto[getAllNotificationsByUserDto](ctx)
+	dto, err := parseQueryDto[GetAllNotificationsByUserDto](ctx)
 	if err != nil {
 		ctx.JSON(
 			http.StatusBadRequest,
@@ -18,7 +18,7 @@ func (h *handler) GetAllNotificationsByUser(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.service.GetAllNotificationsByUser(ctx.Request.Context(), dto.userID)
+	resp, err := h.service.GetAllNotificationsByUser(ctx.Request.Context(), dto.UserID)
 	if err != nil {
 		ctx.JSON(
 			http.StatusInternalServerError,
@@ -36,7 +36,7 @@ func (h *handler) GetAllNotificationsByUser(ctx *gin.Context) {
 }
 
 func (h *handler) GetAdminNotifications(ctx *gin.Context) {
-	dto, err := parseQueryDto[getAdminNotificationsDto](ctx)
+	dto, err := parseQueryDto[GetAdminNotificationsDto](ctx)
 	if err != nil {
 		ctx.JSON(
 			http.StatusBadRequest,
@@ -47,7 +47,7 @@ func (h *handler) GetAdminNotifications(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := h.service.GetAdminNotifications(ctx.Request.Context(), dto.page, dto.limit)
+	resp, err := h.service.GetAdminNotifications(ctx.Request.Context(), dto.Page, dto.Limit)
 	if err != nil {
 		ctx.JSON(
 			http.StatusInternalServerError,

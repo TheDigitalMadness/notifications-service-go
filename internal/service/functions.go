@@ -8,6 +8,7 @@ import (
 	notification_model "github.com/TheDigitalMadness/notifications-service-go/internal/models/notification"
 )
 
+// CreateNotification creates notification with any publicType
 func (s *service) CreateNotification(ctx context.Context, publicType notification_model.PublicType, type_ string, message string, userID *int) {
 	err := s.repo.CreateNotification(ctx, publicType, type_, message, userID)
 	if err != nil {
@@ -16,7 +17,8 @@ func (s *service) CreateNotification(ctx context.Context, publicType notificatio
 	}
 }
 
-func (s *service) GetAllNotificationsByUserDto(ctx context.Context, userID int) (httpController.NotificationsResponse, error) {
+// GetAllNotificationsByUserDto returns all notifications by userID
+func (s *service) GetAllNotificationsByUser(ctx context.Context, userID int) (httpController.NotificationsResponse, error) {
 	notifications, err := s.repo.GetByUserID(ctx, userID)
 	if err != nil {
 		return httpController.NotificationsResponse{}, err
@@ -37,6 +39,7 @@ func (s *service) GetAllNotificationsByUserDto(ctx context.Context, userID int) 
 	return httpController.NotificationsResponse{Notifications: notifications}, nil
 }
 
+// GetAdminNotifications returns all admin notifications with pagination
 func (s *service) GetAdminNotifications(ctx context.Context, page int, limit int) (httpController.NotificationsResponse, error) {
 	notifications, err := s.repo.GetAdminNotifications(ctx, page, limit)
 	if err != nil {

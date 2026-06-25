@@ -17,12 +17,13 @@ import (
 )
 
 func main() {
-	module := getModule()
+	module := newOptions()
 
 	fx.New(module).Run()
 }
 
-func getModule() fx.Option {
+// newOptions creates options to build and run main application
+func newOptions() fx.Option {
 	return fx.Options(
 		fx.Provide(config.MustMakeConfig),
 		fx.Provide(httpController.New),
@@ -34,6 +35,7 @@ func getModule() fx.Option {
 	)
 }
 
+// run starts serving and adds graceful shutdown on stop
 func run(cfg *config.Config, lc fx.Lifecycle, router *gin.Engine, pool *pgxpool.Pool) {
 	addr := fmt.Sprintf("%s:%d", cfg.HTTP.Host, cfg.HTTP.Port)
 	server := &http.Server{
