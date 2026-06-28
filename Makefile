@@ -10,4 +10,4 @@ docker-build:
 
 docker-run:
 	docker build -t ${APP_NAME}:latest .
-	docker run ${APP_NAME}:latest -e .env
+	docker run ${APP_NAME}:latest --env-file .env
